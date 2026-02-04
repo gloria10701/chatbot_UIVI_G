@@ -28,6 +28,17 @@ st.markdown(
         background-color: #f6f3ee;
     }
 
+    textarea { 
+    color: black !important;
+    }
+
+    header {
+    background-color: #AC9362 !important;}
+
+    .stChatInput div {
+    border-radius: 8px;
+    border: 2px solid black;}
+
     span {
         color: black !important;
         }
@@ -48,11 +59,6 @@ st.markdown(
         background-color: #ffffff;
     }
 
-    .chat-container {
-        max-height: 350px;
-        overflow-y: auto;
-        padding-right: 4px;
-    }
 
     textarea {
         border-radius: 6px !important;
