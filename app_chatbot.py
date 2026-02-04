@@ -35,9 +35,7 @@ st.markdown(
     header {
     background-color: #AC9362 !important;}
 
-    .stVerticalBlock {
-    height: 300px !important
-    }
+  
 
     .stChatInput {
     border-radius: 8px;
@@ -71,6 +69,11 @@ st.markdown(
 
     textarea {
         border-radius: 6px !important;
+    }
+    
+    textarea::placeholder {
+        color: black !important;
+        opacity: 1 !important;
     }
     
 
