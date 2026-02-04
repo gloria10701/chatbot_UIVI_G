@@ -35,6 +35,10 @@ st.markdown(
     header {
     background-color: #AC9362 !important;}
 
+    .stVerticalBlock {
+    height: 300px !important
+    }
+
     .stChatInput {
     border-radius: 8px;
     border: 1px solid black !important;
@@ -57,11 +61,11 @@ st.markdown(
     }
 
     .stChatMessage.user {
-        background-color: #eef3ea;
+        background-color: #AC9362;
     }
 
     .stChatMessage.assistant {
-        background-color: #ffffff;
+        background-color: #b7dca4 ;
     }
 
 
