@@ -73,6 +73,9 @@ st.markdown(
         border-radius: 6px !important;
     }
 
+    textarea::placeholder {
+        color: black !important;
+
     button {
         background-color: #b7dca4 !important;
         color: #2f2a25 !important;
