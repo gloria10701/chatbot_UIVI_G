@@ -35,7 +35,9 @@ st.markdown(
     header {
     background-color: #AC9362 !important;}
 
-   
+    .stVerticalBlock {
+    height: 300px !important
+    }
 
     .stChatInput {
     border-radius: 8px;
@@ -51,11 +53,11 @@ st.markdown(
         }
 
         p {
-        color: black !important;
+        color: black !important
     }
 
     .user-msg {
-        color: black !important;
+        color: black !important
     }
 
     .stChatMessage.user {
@@ -63,16 +65,14 @@ st.markdown(
     }
 
     .stChatMessage.assistant {
-        background-color: #b7dca4;
+        background-color: #b7dca4 ;
     }
 
 
     textarea {
         border-radius: 6px !important;
     }
-
-    textarea::placeholder {
-        color: black !important;
+    
 
     button {
         background-color: #b7dca4 !important;
