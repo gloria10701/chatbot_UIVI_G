@@ -35,9 +35,14 @@ st.markdown(
     header {
     background-color: #AC9362 !important;}
 
-    .stChatInput div:first-of-type {
+    .stChatInput {
     border-radius: 8px;
-    border: 2px solid black;}
+    border: 1px solid black !important;
+    }
+
+    .stChatInput div {
+    border-radius: 8px;
+    border: transparent !important;}
 
     span {
         color: black !important;
