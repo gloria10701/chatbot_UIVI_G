@@ -2,81 +2,76 @@ import streamlit as st
 from groq import Groq
 
 # ----------------------------
-# Page config (embed-friendly)
+# Page configuration
 # ----------------------------
 st.set_page_config(
     page_title="Maine Royal Chatbot",
-    layout="centered",
-    initial_sidebar_state="collapsed"
+    layout="centered"
 )
 
 # ----------------------------
-# Hide Streamlit UI junk
+# Custom CSS (visual styling + height control)
 # ----------------------------
-st.markdown("""
-<style>
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-</style>
-""", unsafe_allow_html=True)
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #f6f3ee;
+        color: #2f2a25;
+    }
 
-# ----------------------------
-# Custom styling (SAFE)
-# ----------------------------
-st.markdown("""
-<style>
-body {
-    background-color: #f6f3ee;
-    color: #2f2a25;
-}
+    .stBottom div {
+        background-color: #f6f3ee;
+    }
 
-.chat-wrapper {
-    max-height: 320px;
-    overflow-y: auto;
-    padding: 10px;
-    border: 1px solid #d6d0c8;
-    border-radius: 8px;
-    background-color: #ffffff;
-    margin-bottom: 8px;
-}
+    span {
+        color: black}
 
-.user-msg {
-    background-color: #eef3ea;
-    padding: 8px;
-    border-radius: 6px;
-    margin-bottom: 6px;
-}
+        p {
+        color: black
+    }
 
-.ai-msg {
-    background-color: #ffffff;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #d6d0c8;
-    margin-bottom: 6px;
-}
+    .user-msg {
+        color: black
+    }
 
-textarea {
-    border-radius: 6px !important;
-}
+    .stChatMessage.user {
+        background-color: #eef3ea;
+    }
 
-button {
-    background-color: #b7dca4 !important;
-    color: #2f2a25 !important;
-    border-radius: 6px !important;
-    border: none !important;
-}
-</style>
-""", unsafe_allow_html=True)
+    .stChatMessage.assistant {
+        background-color: #ffffff;
+    }
+
+    .chat-container {
+        max-height: 350px;
+        overflow-y: auto;
+        padding-right: 4px;
+    }
+
+    textarea {
+        border-radius: 6px !important;
+    }
+
+    button {
+        background-color: #b7dca4 !important;
+        color: #2f2a25 !important;
+        border-radius: 6px !important;
+        border: none !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # ----------------------------
-# Title
+# Title and description
 # ----------------------------
-st.markdown("### 🐾 Maine Royal Chatbot")
-st.write("Vprašanja o mačkah pasme **Maine Coon** in Maine Royal izdelkih.")
+st.title("Maine Royal Chatbot")
+st.write("Klepetalnik za vprašanja o mačkah pasme Maine Coon.")
 
 # ----------------------------
-# Groq client
+# Groq API
 # ----------------------------
 client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
@@ -88,48 +83,51 @@ if "messages" not in st.session_state:
         {
             "role": "system",
             "content": (
-                "Si prijazen asistent za podjetje Maine Royal. "
-                "Odgovarjaš samo na vprašanja o mačkah pasme Maine Coon "
-                "in izdelkih Maine Royal. "
-                "Vedno odgovarjaš v slovenščini."
+                "Si prijazen asistent za spletno stran Svet Maine Coon. "
+                "Odgovarjaš izključno na vprašanja o mačkah pasme Maine Coon, "
+                "njihovih značilnostih, negi in prehrani. "
+                "Če vprašanje ni povezano s to temo, vljudno povej, "
+                "da za to področje nimaš informacij. "
+                "Odgovarjaš samo v slovenščini."
             )
         }
     ]
 
 # ----------------------------
-# Chat history (OWN container)
+# Chat history (limited height)
 # ----------------------------
-with st.container():
-    st.markdown('<div class="chat-wrapper">', unsafe_allow_html=True)
+st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 
-    for msg in st.session_state.messages:
-        if msg["role"] == "user":
-            st.markdown(
-                f'<div class="user-msg">{msg["content"]}</div>',
-                unsafe_allow_html=True
-            )
-        elif msg["role"] == "assistant":
-            st.markdown(
-                f'<div class="ai-msg">{msg["content"]}</div>',
-                unsafe_allow_html=True
-            )
+for msg in st.session_state.messages:
+    if msg["role"] != "system":
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
 
-    st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
 # ----------------------------
-# Input
+# User input
 # ----------------------------
 user_input = st.chat_input("Zastavi vprašanje o Maine Coon mačkah...")
 
 if user_input:
-    st.session_state.messages.append({"role": "user", "content": user_input})
-
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=st.session_state.messages
+    st.session_state.messages.append(
+        {"role": "user", "content": user_input}
     )
 
-    ai_text = response.choices[0].message.content
-    st.session_state.messages.append({"role": "assistant", "content": ai_text})
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=st.session_state.messages
+        )
 
-    st.rerun()
+        ai_text = response.choices[0].message.content
+
+        st.session_state.messages.append(
+            {"role": "assistant", "content": ai_text}
+        )
+
+        st.rerun()
+
+    except Exception as e:
+        st.error("Prišlo je do napake pri komunikaciji s strežnikom.")
