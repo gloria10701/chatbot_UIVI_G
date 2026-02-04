@@ -25,14 +25,15 @@ st.markdown(
     }
 
     span {
-        color: black}
+        color: black !important;
+        }
 
         p {
-        color: black
+        color: black !important
     }
 
     .user-msg {
-        color: black
+        color: black !important
     }
 
     .stChatMessage.user {
