@@ -62,12 +62,14 @@ st.markdown(
         color: black !important
     }
 
-    .stLayoutWrapper:nth-of-type(even) .stChatMessage {
-        background-color: #AC9362;
+    
+
+    .stChatMessage [data-testid="stChatMessageAvatarAssistant"] {
+        background-color: white !important;
     }
 
-    .stLayoutWrapper:nth-of-type(odd) .stChatMessage {
-        background-color: #b7dca4;
+     .stChatMessage [data-testid="stChatMessageAvatarUser"] {
+        background-color: white !important;
     }
 
 
