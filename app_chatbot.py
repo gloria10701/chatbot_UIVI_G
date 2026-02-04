@@ -62,14 +62,22 @@ st.markdown(
         color: black !important
     }
 
-    
+    [data-testid="stLayoutWrapper"]:nth-of-type(even) {
+        background-color: #b7dca4 !important; 
+        }
+
+        [data-testid="stLayoutWrapper"]:nth-of-type(even) {
+        background-color: #AC9362 !important; 
+        }
+
+        
 
     .stChatMessage [data-testid="stChatMessageAvatarAssistant"] {
         background-color: white !important;
     }
 
      .stChatMessage [data-testid="stChatMessageAvatarUser"] {
-        background-color: white !important;
+        background-color: #b7dca4 !important;
     }
 
 
