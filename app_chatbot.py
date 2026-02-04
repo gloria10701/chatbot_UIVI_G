@@ -54,15 +54,19 @@ st.markdown(
         color: black !important
     }
 
+    .stMain {
+    max-height:500px
+    }
+
     .user-msg {
         color: black !important
     }
 
-    .stChatMessage.user {
+    .stChatMessage:nth-of-type(even) {
         background-color: #AC9362;
     }
 
-    .stChatMessage.assistant {
+    .stChatMessage:nth-of-type(odd) {
         background-color: #b7dca4 ;
     }
 
