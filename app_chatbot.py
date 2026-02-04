@@ -62,11 +62,11 @@ st.markdown(
         color: black !important
     }
 
-    .stChatMessage:nth-of-type(even) {
+    .stLayoutWrapper:nth-of-type(even) .stChatMessage {
         background-color: #AC9362;
     }
 
-    .stChatMessage:nth-of-type(odd) {
+    .stLayoutWrapper:nth-of-type(odd) .stChatMessage {
         background-color: #b7dca4 ;
     }
 
