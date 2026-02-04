@@ -2,58 +2,112 @@ import streamlit as st
 from groq import Groq
 
 # ----------------------------
-# Nastavitve strani
+# Page configuration
 # ----------------------------
 st.set_page_config(
     page_title="Maine Royal Chatbot",
-    page_icon=None,
     layout="centered"
 )
 
-st.title("Maine Royal Chatbot")
-st.write("Pametni klepetalnik za vprašanja o mačkah in izdelkih Maine Royal.")
+# ----------------------------
+# Custom CSS (visual styling + height control)
+# ----------------------------
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #f6f3ee;
+        color: #2f2a25;
+    }
+
+    .stChatMessage {
+        background-color: #ffffff;
+        border: 1px solid #d6d0c8;
+        border-radius: 6px;
+        padding: 8px;
+        margin-bottom: 6px;
+    }
+
+    .stChatMessage.user {
+        background-color: #eef3ea;
+    }
+
+    .stChatMessage.assistant {
+        background-color: #ffffff;
+    }
+
+    .chat-container {
+        max-height: 350px;
+        overflow-y: auto;
+        padding-right: 4px;
+    }
+
+    textarea {
+        border-radius: 6px !important;
+    }
+
+    button {
+        background-color: #b7dca4 !important;
+        color: #2f2a25 !important;
+        border-radius: 6px !important;
+        border: none !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # ----------------------------
-# Groq API ključ iz Streamlit Secrets
+# Title and description
+# ----------------------------
+st.title("Maine Royal Chatbot")
+st.write("Klepetalnik za vprašanja o mačkah pasme Maine Coon.")
+
+# ----------------------------
+# Groq API
 # ----------------------------
 client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 # ----------------------------
-# Spomin znotraj seje
+# Session memory
 # ----------------------------
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {
             "role": "system",
             "content": (
-                "Si prijazen asistent za podjetje Maine Royal. "
-                "Odgovarjaš samo na vprašanja o mačkah in izdelkih Maine Royal. "
-                "Če uporabnik vpraša kaj drugega, vljudno povej, da nimaš informacij. "
-                "Odgovarjaš izključno v slovenščini, slovnično pravilno."
+                "Si prijazen asistent za spletno stran Svet Maine Coon. "
+                "Odgovarjaš izključno na vprašanja o mačkah pasme Maine Coon, "
+                "njihovih značilnostih, negi in prehrani. "
+                "Če vprašanje ni povezano s to temo, vljudno povej, "
+                "da za to področje nimaš informacij. "
+                "Odgovarjaš samo v slovenščini."
             )
         }
     ]
 
 # ----------------------------
-# Prikaz zgodovine pogovora
+# Chat history (limited height)
 # ----------------------------
+st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+
 for msg in st.session_state.messages:
     if msg["role"] != "system":
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
+st.markdown('</div>', unsafe_allow_html=True)
+
 # ----------------------------
-# Vnos uporabnika
+# User input
 # ----------------------------
-user_input = st.chat_input("Vpiši svoje vprašanje...")
+user_input = st.chat_input("Zastavi vprašanje o Maine Coon mačkah...")
 
 if user_input:
-    # Dodamo uporabnikov vnos v zgodovino
-    st.session_state.messages.append({"role": "user", "content": user_input})
-    with st.chat_message("user"):
-        st.markdown(user_input)
+    st.session_state.messages.append(
+        {"role": "user", "content": user_input}
+    )
 
-    # Klic Groq API
     try:
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
@@ -62,12 +116,11 @@ if user_input:
 
         ai_text = response.choices[0].message.content
 
-        # Shranimo AI odgovor v zgodovino
-        st.session_state.messages.append({"role": "assistant", "content": ai_text})
+        st.session_state.messages.append(
+            {"role": "assistant", "content": ai_text}
+        )
 
-        # Prikaz odgovora
-        with st.chat_message("assistant"):
-            st.markdown(ai_text)
+        st.rerun()
 
     except Exception as e:
-        st.error(f"Prišlo je do napake: {e}")
+        st.error("Prišlo je do napake pri komunikaciji s strežnikom.")
