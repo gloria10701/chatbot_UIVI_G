@@ -67,7 +67,7 @@ st.markdown(
     }
 
     .stLayoutWrapper:nth-of-type(odd) .stChatMessage {
-        background-color: #b7dca4 ;
+        background-color: #b7dca4;
     }
 
 
